@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "cpe": {
+      "commandName": "Project",
+      "commandLineArgs": "--name=proxy --ip=127.0.0.1 --port=5000"
+    }
+  }
+}
