@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Drawing;
     using System.Globalization;
     using System.IO;
     using System.Text;
@@ -14,6 +15,14 @@
             {
                 { "background", "background.js" },
                 { "manifest", "manifest.json" },
+            };
+
+        /// <summary></summary>
+        private static readonly Dictionary<string, string> Images = new Dictionary<string, string>()
+            {
+                { "cpe16", "cpe16.png" },
+                { "cpe48", "cpe48.png" },
+                { "cpe128", "cpe128.png" },
             };
 
         /// <summary></summary>
@@ -30,6 +39,12 @@
                 var res = GetResource(resource.Key);
                 ChangeResource(config, ref res);
                 SaveResource($"{config.GetValue("name")}\\{resource.Value}", ref res);
+            }
+
+            foreach (var image in Images)
+            {
+                using var res = GetImage(image.Key);
+                SaveImage($"{config.GetValue("name")}\\{image.Value}", res);
             }
 
             Create($"{config.GetValue("name")}");
@@ -52,6 +67,20 @@
             }
 
             return string.Empty;
+        }
+
+        /// <summary></summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        static private Bitmap GetImage(string name)
+        {
+            if (Properties.Resources.ResourceManager.GetObject(name, CultureInfo.InvariantCulture) is byte[] dataByte)
+            {
+                using MemoryStream stream = new MemoryStream(dataByte);
+                return new Bitmap(stream);
+            }
+
+            return null;
         }
 
         /// <summary></summary>
@@ -84,31 +113,30 @@
             File.WriteAllText(path, resource);
         }
 
+        /// <summary></summary>
+        /// <param name="name"></param>
+        /// <param name="resource"></param>
+        static private void SaveImage(string name, Bitmap resource)
+        {
+            var path = $"{Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)}\\{name}";
+            var dir = $"{Path.GetDirectoryName(path)}";
+
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+
+            resource.Save(path);
+        }
+
         static private void Create(string name)
         {
             var path = $"{Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)}\\{name}";
 
             var chrome = Environment.GetEnvironmentVariable("ProgramFiles(x86)") + @"\Google\Chrome\Application\chrome.exe";
 
-            //All file
-            Process.Start(chrome, $"--pack-extension=\"{path}\"").WaitForExit();
-
-            //*.Pem
-            //Process.Start(chrome, $"--pack-extension=\"{path}\" --no-message-box").WaitForExit();
-
-            //var process = new Process()
-            //{
-            //    StartInfo = new ProcessStartInfo
-            //    {
-            //        FileName = "chrome.exe",
-            //        Arguments = $"--pack-extension=\"{path}\" --no-message-box",
-            //        RedirectStandardOutput = true,
-            //        UseShellExecute = false,
-            //        CreateNoWindow = true,
-            //    }
-            //};
-            //process.Start();
-            //process.WaitForExit();
+            //Create *.pem and *.crx files
+            Process.Start(chrome, $"--pack-extension=\"{path}\" --no-message-box").WaitForExit();
         }
     }
 }

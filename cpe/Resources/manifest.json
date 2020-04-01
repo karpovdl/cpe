@@ -1,8 +1,8 @@
 {
   "version": "0.0.1",
-  "manifest_version": 1,
+  "manifest_version": 2,
   "name": "HTTP PROXY {IP}:{PORT}",
-  "description": "This proxy extension.",
+  "description": "This is an extension of the proxy with data substitution in the authorization form.",
   "permissions": [
     "proxy",
     "tabs",
@@ -12,6 +12,10 @@
     "webRequest",
     "webRequestBlocking"
   ],
+  "browser_action": {
+    "default_icon": "cpe16.png",
+    "default_title": "HTTP PROXY {IP}:{PORT}"
+  },
   "icons": {
     "16": "cpe16.png",
     "48": "cpe48.png",
