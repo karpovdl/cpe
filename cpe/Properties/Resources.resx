@@ -121,6 +121,12 @@
   <data name="background" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\background.js;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
+  <data name="ChromeAppNotFound" xml:space="preserve">
+    <value>Chrome app not found.</value>
+  </data>
+  <data name="ChromeExtensionWasCreatedSuccessfully" xml:space="preserve">
+    <value>The chrome extension was created successfully.</value>
+  </data>
   <data name="cpe128" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\cpe128.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

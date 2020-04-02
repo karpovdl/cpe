@@ -1,8 +1,10 @@
 {
-  "version": "0.0.1",
   "manifest_version": 2,
   "name": "HTTP PROXY {IP}:{PORT}",
+  "short_name": "HTTP PROXY",
+  "version": "1.0.0.2",
   "description": "This is an extension of the proxy with data substitution in the authorization form.",
+  "homepage_url": "http://github.com/karpovdl/cpe",
   "permissions": [
     "proxy",
     "tabs",
@@ -12,6 +14,7 @@
     "webRequest",
     "webRequestBlocking"
   ],
+  "incognito": "spanning",
   "browser_action": {
     "default_icon": "cpe16.png",
     "default_title": "HTTP PROXY {IP}:{PORT}"
@@ -24,5 +27,5 @@
   "background": {
     "scripts": [ "background.js" ]
   },
-  "minimum_chrome_version": "22.0.0"
+  "minimum_chrome_version": "35.0.0"
 }

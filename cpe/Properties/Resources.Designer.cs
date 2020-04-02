@@ -94,6 +94,24 @@ namespace cpe.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Chrome app not found..
+        /// </summary>
+        internal static string ChromeAppNotFound {
+            get {
+                return ResourceManager.GetString("ChromeAppNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The chrome extension was created successfully..
+        /// </summary>
+        internal static string ChromeExtensionWasCreatedSuccessfully {
+            get {
+                return ResourceManager.GetString("ChromeExtensionWasCreatedSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] cpe128 {

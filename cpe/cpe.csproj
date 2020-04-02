@@ -3,10 +3,13 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <PublishSingleFile>true</PublishSingleFile>
-    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-    <PublishTrimmed>true</PublishTrimmed>
     <ApplicationIcon>cpe.ico</ApplicationIcon>
+    <NeutralLanguage>en</NeutralLanguage>
+    <AssemblyVersion>1.0.0.2</AssemblyVersion>
+    <Description>This is an extension of the proxy with data substitution in the authorization form.</Description>
+    <PackageIcon>cpe16.png</PackageIcon>
+    <FileVersion>1.0.0.2</FileVersion>
+    <Version>1.0.0.2</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,6 +34,13 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Resources\cpe16.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

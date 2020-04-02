@@ -8,6 +8,7 @@
     using System.IO;
     using System.Text;
 
+    /// <summary></summary>
     static class Make
     {
         /// <summary></summary>
@@ -34,20 +35,24 @@
                 throw new ArgumentNullException(nameof(config));
             }
 
-            foreach(var resource in Resources)
+            var name = $"{config.GetValue("name")}";
+
+            Delete(name);
+
+            foreach (var resource in Resources)
             {
                 var res = GetResource(resource.Key);
                 ChangeResource(config, ref res);
-                SaveResource($"{config.GetValue("name")}\\{resource.Value}", ref res);
+                SaveResource($"{name}\\{resource.Value}", ref res);
             }
 
             foreach (var image in Images)
             {
                 using var res = GetImage(image.Key);
-                SaveImage($"{config.GetValue("name")}\\{image.Value}", res);
+                SaveImage($"{name}\\{image.Value}", res);
             }
 
-            Create($"{config.GetValue("name")}");
+            Create(name);
         }
 
         /// <summary></summary>
@@ -84,6 +89,22 @@
         }
 
         /// <summary></summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        static private string GetPath(string name)
+        {
+            var path = $"{Directory.GetCurrentDirectory()}\\{name}";
+            var dir = $"{Path.GetDirectoryName(path)}";
+
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+
+            return path;
+        }
+
+        /// <summary></summary>
         /// <param name="config"></param>
         /// <param name="resource"></param>
         static private void ChangeResource(Config config, ref string resource)
@@ -102,15 +123,7 @@
         /// <param name="resource"></param>
         static private void SaveResource(string name, ref string resource)
         {
-            var path = $"{Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)}\\{name}";
-            var dir = $"{Path.GetDirectoryName(path)}";
-
-            if (!Directory.Exists(dir))
-            {
-                Directory.CreateDirectory(dir);
-            }
-
-            File.WriteAllText(path, resource);
+            File.WriteAllText(GetPath(name), resource);
         }
 
         /// <summary></summary>
@@ -118,25 +131,47 @@
         /// <param name="resource"></param>
         static private void SaveImage(string name, Bitmap resource)
         {
-            var path = $"{Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)}\\{name}";
-            var dir = $"{Path.GetDirectoryName(path)}";
+            resource.Save(GetPath(name));
+        }
 
-            if (!Directory.Exists(dir))
+        /// <summary></summary>
+        /// <param name="name"></param>
+        static private void Delete(string name)
+        {
+            var path = $"{Directory.GetCurrentDirectory()}\\{name}";
+
+            if (Directory.Exists(path))
             {
-                Directory.CreateDirectory(dir);
+                Directory.Delete(path, true);
             }
 
-            resource.Save(path);
+            if (File.Exists($"{path}.pem"))
+            {
+                File.Delete($"{path}.pem");
+            }
+
+            if (File.Exists($"{path}.crx"))
+            {
+                File.Delete($"{path}.crx");
+            }
         }
 
         static private void Create(string name)
         {
-            var path = $"{Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)}\\{name}";
+            var path = GetPath(name);
+            Console.WriteLine($"Path extension: {path}");
 
-            var chrome = Environment.GetEnvironmentVariable("ProgramFiles(x86)") + @"\Google\Chrome\Application\chrome.exe";
+            var chrome = string.Concat(Environment.GetEnvironmentVariable("ProgramFiles(x86)"), @"\Google\Chrome\Application\chrome.exe");
+            if (!File.Exists(chrome))
+            {
+                Console.WriteLine(Properties.Resources.ChromeAppNotFound);
+                return;
+            }
 
             //Create *.pem and *.crx files
             Process.Start(chrome, $"--pack-extension=\"{path}\" --no-message-box").WaitForExit();
+
+            Console.WriteLine(Properties.Resources.ChromeExtensionWasCreatedSuccessfully);
         }
     }
 }

@@ -1,3 +1,3 @@
 :: Script for run an application for Windows
 
-dotnet cpe --ip=value1 --port=value2 --bypass_list=value3
+cpe --name="proxy.127.0.0.1.5000" --ip="127.0.0.1" --port="5000" --cu="user" --cp="password"

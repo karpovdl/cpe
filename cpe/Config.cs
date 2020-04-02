@@ -18,7 +18,7 @@
         private static string Description => "the application creates an proxy extension chrome based on the specified parameters";
 
         /// <summary></summary>
-        private static string Version => "1.0.0.0";
+        private static string Version => "1.0.0.2";
 
         /// <summary></summary>
         internal readonly Dictionary<string, string> Keys = new Dictionary<string, string>()
@@ -31,6 +31,7 @@
                 { "--bl", "bypass_list" },
             };
 
+        /// <summary></summary>
         private readonly List<string> _keysMandatory = new List<string>() { "name", "ip", "port" };
 
         /// <summary></summary>
@@ -70,14 +71,15 @@
         {
             _isHideVersion = isHideVersion;
 
-            if (args.Length == 0 || args.Length == 1 && args.Any(a => a == "-h" || a == "--help"))
+            if ((args.Length == 0) ||
+                (args.Length == 1 && args.Any(a => a.Equals("-h", StringComparison.InvariantCultureIgnoreCase) || a.Equals("--help", StringComparison.InvariantCultureIgnoreCase))))
             {
                 IsHelpFlag = true;
                 ShowHelp();
                 return;
             }
 
-            if (args.Length == 1 && args.Any(a => a == "-v" || a == "--version"))
+            if (args.Length == 1 && args.Any(a => a.Equals("-v", StringComparison.InvariantCultureIgnoreCase) || a.Equals("--version", StringComparison.InvariantCultureIgnoreCase)))
             {
                 IsVersionFlag = true;
                 ShowVersion();
@@ -178,7 +180,7 @@
             foreach (var key in Keys)
             {
                 var mandatory = string.Empty;
-                if (_keysMandatory.Any(k => k == key.Value))
+                if (_keysMandatory.Any(k => k.Equals(key.Value, StringComparison.OrdinalIgnoreCase)))
                 {
                     mandatory = $"Key '{key.Value}' is mandatory.";
                 }
