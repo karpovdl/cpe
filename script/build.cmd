@@ -1,6 +1,16 @@
 :: Script for building an application for Windows
 
+echo off
+
+call killprocess.cmd
+
 cd ..
+
+:: Kill running processes
+:: SETLOCAL EnableExtensions
+
+:: set EXE=cpe.exe
+:: FOR /F %%x IN ('tasklist /NH /FI "IMAGENAME eq %EXE%"') DO IF %%x == %EXE% taskkill /F /IM cpe.exe /T
 
 :: Del old data
 IF EXIST "publish" RMDIR "publish" /Q /S
