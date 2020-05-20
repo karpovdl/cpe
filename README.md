@@ -1,10 +1,13 @@
 # cpe
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?label=License&maxAge=86400)](./LICENSE)
-[![codebeat][1]][2]
+[![codebeat][1]][2] [![codefactor][3]][4]
 
-[1]: https://codebeat.co/badges/7d48f2be-145b-4a23-a43d-53dd56d0b2ea "Codebeat badge"
+[1]: https://codebeat.co/badges/7d48f2be-145b-4a23-a43d-53dd56d0b2ea "Codebeat"
 [2]: https://codebeat.co/projects/github-com-karpovdl-cpe-master "Codebeat"
+
+[3]: https://www.codefactor.io/repository/github/karpovdl/cpe/badge "CodeFactor"
+[4]: https://www.codefactor.io/repository/github/karpovdl/cpe "CodeFactor"
 
 [![](cpe/Resources/cpe48.png)](https://github.com/karpovdl/cpe)
 
