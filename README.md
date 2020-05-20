@@ -7,6 +7,8 @@
 [1]: https://codebeat.co/badges/7d48f2be-145b-4a23-a43d-53dd56d0b2ea "Codebeat badge"
 [2]: https://codebeat.co/projects/github-com-karpovdl-cpe-master "Codebeat"
 
+[![](cpe/Resources/cpe48.png)](https://github.com/karpovdl/cpe)
+
 Chrome proxy extension.
 This is an extension of the proxy with data substitution in the authorization form.
 
