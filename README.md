@@ -14,7 +14,7 @@ This is an extension of the proxy with data substitution in the authorization fo
 
 ## Used packages
 
-- [Microsoft.Extensions.Configuration.CommandLine](https://www.nuget.org/packages/Microsoft.Extensions.Configuration.CommandLine) 3.1.3
+- [Microsoft.Extensions.Configuration.CommandLine](https://www.nuget.org/packages/Microsoft.Extensions.Configuration.CommandLine) 3.1.4
 - [System.Drawing.Common](https://www.nuget.org/packages/System.Drawing.Common) 4.7.0
 
 ### Sample create extension
