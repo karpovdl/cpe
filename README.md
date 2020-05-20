@@ -1,8 +1,7 @@
 # cpe
 
-![][0] [![codebeat][1]][2]
-
-[0]: https://img.shields.io/badge/license-MIT-blue.svg "License"
+[![License](https://img.shields.io/badge/license-MIT-blue.svg?label=License&maxAge=86400)](./LICENSE)
+[![codebeat][1]][2]
 
 [1]: https://codebeat.co/badges/7d48f2be-145b-4a23-a43d-53dd56d0b2ea "Codebeat badge"
 [2]: https://codebeat.co/projects/github-com-karpovdl-cpe-master "Codebeat"
