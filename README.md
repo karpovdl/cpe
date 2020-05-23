@@ -1,13 +1,16 @@
 # cpe
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?label=License&maxAge=86400)](./LICENSE)
-[![codebeat][1]][2] [![codefactor][3]][4]
+[![netcore][10]][11] [![codebeat][20]][21] [![codefactor][22]][23] 
 
-[1]: https://codebeat.co/badges/7d48f2be-145b-4a23-a43d-53dd56d0b2ea "Codebeat"
-[2]: https://codebeat.co/projects/github-com-karpovdl-cpe-master "Codebeat"
+[10]: https://img.shields.io/badge/.NET%20Core-3.1-blue.svg?style=flat ".NET Core"
+[11]: https://dotnet.microsoft.com/download/dotnet-core/3.1
 
-[3]: https://www.codefactor.io/repository/github/karpovdl/cpe/badge "CodeFactor"
-[4]: https://www.codefactor.io/repository/github/karpovdl/cpe "CodeFactor"
+[20]: https://codebeat.co/badges/7d48f2be-145b-4a23-a43d-53dd56d0b2ea "Codebeat"
+[21]: https://codebeat.co/projects/github-com-karpovdl-cpe-master "Codebeat"
+
+[22]: https://www.codefactor.io/repository/github/karpovdl/cpe/badge "CodeFactor"
+[23]: https://www.codefactor.io/repository/github/karpovdl/cpe "CodeFactor"
 
 [![](cpe/Resources/cpe48.png)](https://github.com/karpovdl/cpe)
 
