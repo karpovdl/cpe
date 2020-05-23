@@ -6,7 +6,9 @@
     using System.Drawing;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
     using System.Text;
+    using System.Threading.Tasks;
 
     /// <summary></summary>
     static class Make
@@ -39,18 +41,18 @@
 
             Delete(name);
 
-            foreach (var resource in Resources)
+            Resources.AsParallel().ForAll(async resource =>
             {
                 var res = GetResource(resource.Key);
-                ChangeResource(config, ref res);
-                SaveResource($"{name}\\{resource.Value}", ref res);
-            }
+                res = ChangeResource(config, res);
+                await SaveResourceAsync($"{name}\\{resource.Value}", res).ConfigureAwait(false);
+            });
 
-            foreach (var image in Images)
+            Images.AsParallel().ForAll(image =>
             {
                 using var res = GetImage(image.Key);
                 SaveImage($"{name}\\{image.Value}", res);
-            }
+            });
 
             Create(name);
         }
@@ -107,32 +109,28 @@
         /// <summary></summary>
         /// <param name="config"></param>
         /// <param name="resource"></param>
-        static private void ChangeResource(Config config, ref string resource)
+        static private string ChangeResource(Config config, string resource)
         {
-            foreach (var key in config.Keys)
+            config.Keys.AsParallel().ForAll(key =>
             {
                 resource = resource.Replace(
                     string.Join(null, "{", $"{key.Value}", "}"),
                     config.GetValue(key.Value),
                     StringComparison.InvariantCultureIgnoreCase);
-            }
+            });
+
+            return resource;
         }
 
         /// <summary></summary>
         /// <param name="name"></param>
         /// <param name="resource"></param>
-        static private void SaveResource(string name, ref string resource)
-        {
-            File.WriteAllText(GetPath(name), resource);
-        }
+        static private async Task SaveResourceAsync(string name, string resource) => await File.WriteAllTextAsync(GetPath(name), resource).ConfigureAwait(false);
 
         /// <summary></summary>
         /// <param name="name"></param>
         /// <param name="resource"></param>
-        static private void SaveImage(string name, Bitmap resource)
-        {
-            resource.Save(GetPath(name));
-        }
+        static private void SaveImage(string name, Bitmap resource) => resource.Save(GetPath(name));
 
         /// <summary></summary>
         /// <param name="name"></param>

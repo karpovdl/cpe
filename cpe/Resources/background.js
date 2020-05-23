@@ -1,4 +1,4 @@
-var config = {
+let config = {
     mode: "fixed_servers",
     rules: {
         singleProxy: {
@@ -15,7 +15,7 @@ chrome.proxy.settings.set({
     scope: "regular"
 }, function () {});
 
-function callbackFn(details) {
+function callbackFn() {
     return {
         authCredentials: {
             username: "{CREDENTIALS_USER}",

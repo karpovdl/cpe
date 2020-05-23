@@ -8,20 +8,20 @@
     /// <summary></summary>
     sealed internal class Config : IDisposable
     {
-        /// <summary></summary>
+        /// <summary>Application name.</summary>
         private static string Name => "cpe";
 
-        /// <summary></summary>
+        /// <summary>The full name of the application.</summary>
         private static string FullName => "Chrome proxy extension";
 
-        /// <summary></summary>
+        /// <summary>Description of the application.</summary>
         private static string Description => "the application creates an proxy extension chrome based on the specified parameters";
 
-        /// <summary></summary>
-        private static string Version => "1.0.0.2";
+        /// <summary>Application version.</summary>
+        private static string Version => "1.0.0.3";
 
-        /// <summary></summary>
-        internal readonly Dictionary<string, string> Keys = new Dictionary<string, string>()
+        /// <summary>Directory of available keys</summary>
+        internal readonly IReadOnlyDictionary<string, string> Keys = new Dictionary<string, string>
             {
                 { "-n", "name" },
                 { "-i", "ip" },
@@ -31,8 +31,8 @@
                 { "--bl", "bypass_list" },
             };
 
-        /// <summary></summary>
-        private readonly List<string> _keysMandatory = new List<string>() { "name", "ip", "port" };
+        /// <summary>Set of required keys.</summary>
+        private readonly IReadOnlyList<string> _keysMandatory = new List<string>() { "name", "ip", "port" };
 
         /// <summary></summary>
         private readonly IConfigurationRoot Configuration;
@@ -43,7 +43,8 @@
         /// <summary></summary>
         internal readonly bool IsVersionFlag;
 
-        internal readonly bool IsNotAllMandataryKeysEntered;
+        /// <summary>If [true], then not all necessary keys are entered, otherwise [false].</summary>
+        internal readonly bool IsNotAllMandatoryKeysEntered;
 
         /// <summary></summary>
         private readonly bool _isHideVersion;
@@ -55,14 +56,7 @@
         /// <param name="args"></param>
         /// <param name="isHideVersion"></param>
         /// <returns></returns>
-        public static Config Init(string[] args, bool isHideVersion = false)
-        {
-            if (_instance == null)
-            {
-                _instance = new Config(args, isHideVersion);
-            }
-            return _instance;
-        }
+        public static Config Init(string[] args, bool isHideVersion = false) => _instance ??= new Config(args, isHideVersion);
 
         /// <summary></summary>
         /// <param name="args"></param>
@@ -88,10 +82,10 @@
 
             Configuration = ReadConfiguration(args);
 
-            IsNotAllMandataryKeysEntered = !TryCheckMandatoryKeys();
+            IsNotAllMandatoryKeysEntered = !TryCheckMandatoryKeys();
         }
 
-        /// </summary>
+        /// <summary></summary>
         public void Dispose()
         {
         }
@@ -104,7 +98,7 @@
             try
             {
                 var builder = new ConfigurationBuilder();
-                builder.AddCommandLine(args, Keys);
+                builder.AddCommandLine(args, (IDictionary<string, string>)Keys);
                 return builder.Build();
             }
             catch(FormatException fe)

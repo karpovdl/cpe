@@ -1,31 +1,30 @@
 {
-  "manifest_version": 2,
   "name": "HTTP PROXY {IP}:{PORT}",
+  "version": "1.0.0.3",
+  "manifest_version": 2,
   "short_name": "HTTP PROXY",
-  "version": "1.0.0.2",
   "description": "This is an extension of the proxy with data substitution in the authorization form.",
   "homepage_url": "http://github.com/karpovdl/cpe",
+  "icons": { "16": "cpe16.png",
+             "48": "cpe48.png",
+            "128": "cpe128.png" },
+  "incognito": "split",
   "permissions": [
-    "proxy",
-    "tabs",
-    "unlimitedStorage",
-    "storage",
-    "<all_urls>",
-    "webRequest",
-    "webRequestBlocking"
+    "proxy", /*Required if the extension uses the chrome.proxy module.*/
+    "tabs", /*Required if the extension uses the chrome.tabs or chrome.windows module.*/
+    "unlimitedStorage", /*Provides an unlimited quota for storing HTML5 client-side data, such as databases and local storage files. Without this permission, the extension is limited to 5 MB of local storage.*/
+    "webNavigation", /*Required if the extension uses the chrome.webNavigation module.*/
+    "webRequest", /*Required if the extension uses the chrome.webRequest module.*/
+    "webRequestBlocking", /*Required if the extension uses the chrome.webRequest module in a blocking fashion.*/
+    "<all_urls>"
   ],
-  "incognito": "spanning",
   "browser_action": {
     "default_icon": "cpe16.png",
     "default_title": "HTTP PROXY {IP}:{PORT}"
   },
-  "icons": {
-    "16": "cpe16.png",
-    "48": "cpe48.png",
-    "128": "cpe128.png"
-  },
   "background": {
     "scripts": [ "background.js" ]
   },
-  "minimum_chrome_version": "35.0.0"
+  "offline_enabled": true,
+  "minimum_chrome_version": "47.0.0"
 }

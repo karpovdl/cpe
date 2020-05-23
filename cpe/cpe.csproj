@@ -5,11 +5,16 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <ApplicationIcon>cpe.ico</ApplicationIcon>
     <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>1.0.0.2</AssemblyVersion>
+    <AssemblyVersion>1.0.0.3</AssemblyVersion>
     <Description>This is an extension of the proxy with data substitution in the authorization form.</Description>
     <PackageIcon>cpe16.png</PackageIcon>
-    <FileVersion>1.0.0.2</FileVersion>
-    <Version>1.0.0.2</Version>
+    <FileVersion>1.0.0.3</FileVersion>
+    <Version>1.0.0.3</Version>
+    <StartupObject>cpe.Program</StartupObject>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageProjectUrl></PackageProjectUrl>
+    <RepositoryUrl>https://github.com/karpovdl/cpe</RepositoryUrl>
+    <Authors>Denis Karpov</Authors>
   </PropertyGroup>
 
   <ItemGroup>
