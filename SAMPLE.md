@@ -1,15 +1,15 @@
 # Sample
 
-## Create an extension named "proxy.127.0.0.1.5000".
+## Create an extension named "proxy.127.0.0.1.5000"
 
 ```
-    cpe --name="proxy.127.0.0.1.5000" --ip="127.0.0.1" --port="5000" --cu="user" --cp="password"
+cpe --name="proxy.127.0.0.1.5000" --ip="127.0.0.1" --port="5000" --cu="user" --cp="password"
 ```
 
-## Create an extension named and delete the folder with the unpacked extension.
+## Create an extension named and delete the folder with the unpacked extension
 
 ```
-    cpe --name="proxy.127.0.0.1.5000" --ip="127.0.0.1" --port="5000" --cu="user" --cp="password" --da="true"
+cpe --name="proxy.127.0.0.1.5000" --ip="127.0.0.1" --port="5000" --cu="user" --cp="password" --da="true"
 ```
 
 ## Selenium web driver
