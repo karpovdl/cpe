@@ -4,6 +4,7 @@
     using Microsoft.Extensions.Configuration;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
 
     /// <summary></summary>
     sealed internal class Config : IDisposable
@@ -18,7 +19,7 @@
         private static string Description => "the application creates an proxy extension chrome based on the specified parameters";
 
         /// <summary>Application version.</summary>
-        private static string Version => "1.0.0.3";
+        private static string Version => "1.0.0.4";
 
         /// <summary>Directory of available keys</summary>
         internal readonly IReadOnlyDictionary<string, string> Keys = new Dictionary<string, string>
@@ -29,25 +30,26 @@
                 { "--cu", "credentials_user" },
                 { "--cp", "credentials_pass" },
                 { "--bl", "bypass_list" },
+                { "--da", "delete_artifactory"},
             };
 
         /// <summary>Set of required keys.</summary>
         private readonly IReadOnlyList<string> _keysMandatory = new List<string>() { "name", "ip", "port" };
 
         /// <summary></summary>
-        private readonly IConfigurationRoot Configuration;
+        private IConfigurationRoot Configuration { get; set; }
 
         /// <summary></summary>
-        internal readonly bool IsHelpFlag;
+        internal bool IsHelpFlag { get; set; }
 
         /// <summary></summary>
-        internal readonly bool IsVersionFlag;
+        internal bool IsVersionFlag { get; set; }
 
         /// <summary>If [true], then not all necessary keys are entered, otherwise [false].</summary>
-        internal readonly bool IsNotAllMandatoryKeysEntered;
+        internal bool IsNotAllMandatoryKeysEntered { get; set; }
 
         /// <summary></summary>
-        private readonly bool _isHideVersion;
+        private bool _isHideVersion;
 
         /// <summary></summary>
         private static Config _instance;
@@ -63,26 +65,34 @@
         /// <param name="isHideVersion"></param>
         private Config(string[] args, bool isHideVersion = false)
         {
+            ConfigAsync(args, isHideVersion).GetAwaiter().GetResult();
+        }
+
+        /// <summary></summary>
+        /// <param name="args"></param>
+        /// <param name="isHideVersion"></param>
+        private async Task ConfigAsync(string[] args, bool isHideVersion = false)
+        {
             _isHideVersion = isHideVersion;
 
             if ((args.Length == 0) ||
                 (args.Length == 1 && args.Any(a => a.Equals("-h", StringComparison.InvariantCultureIgnoreCase) || a.Equals("--help", StringComparison.InvariantCultureIgnoreCase))))
             {
                 IsHelpFlag = true;
-                ShowHelp();
+                await ShowHelpAsync().ConfigureAwait(false);
                 return;
             }
 
             if (args.Length == 1 && args.Any(a => a.Equals("-v", StringComparison.InvariantCultureIgnoreCase) || a.Equals("--version", StringComparison.InvariantCultureIgnoreCase)))
             {
                 IsVersionFlag = true;
-                ShowVersion();
+                await ShowVersionAsync().ConfigureAwait(false);
                 return;
             }
 
-            Configuration = ReadConfiguration(args);
+            Configuration = await ReadConfigurationAsync(args).ConfigureAwait(false);
 
-            IsNotAllMandatoryKeysEntered = !TryCheckMandatoryKeys();
+            IsNotAllMandatoryKeysEntered = !await TryCheckMandatoryKeysAsync().ConfigureAwait(false);
         }
 
         /// <summary></summary>
@@ -93,7 +103,7 @@
         /// <summary></summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        private IConfigurationRoot ReadConfiguration(string[] args)
+        private async Task<IConfigurationRoot> ReadConfigurationAsync(string[] args)
         {
             try
             {
@@ -103,9 +113,9 @@
             }
             catch(FormatException fe)
             {
-                ShowHelp();
+                await ShowHelpAsync().ConfigureAwait(false);
 
-                Console.WriteLine($"Error parsing key: {fe.Message}");
+                await Console.Out.WriteLineAsync($"Error parsing key: {fe.Message}").ConfigureAwait(false);
             }
 
             return null;
@@ -119,7 +129,7 @@
         }
 
         /// <summary></summary>
-        private bool TryCheckMandatoryKeys()
+        private async Task<bool> TryCheckMandatoryKeysAsync()
         {
             var allMandataryKeysEntered = true;
             foreach(var key in _keysMandatory)
@@ -129,48 +139,49 @@
                     continue;
                 }
 
-                Console.WriteLine($"Key '{key}' is mandatory.");
+                await Console.Out.WriteLineAsync($"Key '{key}' is mandatory.").ConfigureAwait(false);
                 allMandataryKeysEntered = false;
             }
 
             if (!allMandataryKeysEntered)
             {
-                Console.WriteLine(Properties.Resources.ForMoreInformationCallHelp);
+                await Console.Out.WriteLineAsync(Properties.Resources.ForMoreInformationCallHelp).ConfigureAwait(false);
             }
 
             return allMandataryKeysEntered;
         }
 
         /// <summary></summary>
-        private static void ShowName() => Console.WriteLine($"App - {Name}");
+        private static async Task ShowNameAsync() => await Console.Out.WriteLineAsync($"App - {Name}").ConfigureAwait(false);
 
         /// <summary></summary>
-        private static void ShowFullName() => Console.WriteLine($"{FullName} - {Description}");
+        private static async Task ShowFullNameAsync() => await Console.Out.WriteLineAsync($"{FullName} - {Description}").ConfigureAwait(false);
 
         /// <summary></summary>
-        internal void ShowVersion()
+        internal async Task ShowVersionAsync()
         {
             if (_isHideVersion)
             {
                 return;
             }
 
-            Console.WriteLine($"Version {Version}.");
+            await Console.Out.WriteLineAsync($"Version {Version}.").ConfigureAwait(false);
         }
 
         /// <summary></summary>
-        internal void ShowHelp()
+        internal async Task ShowHelpAsync()
         {
-            ShowName();
-            ShowFullName();
-            ShowVersion();
-            ShowKeys();
+            await ShowNameAsync().ConfigureAwait(false);
+            await ShowFullNameAsync().ConfigureAwait(false);
+            await ShowVersionAsync().ConfigureAwait(false);
+            await ShowKeysAsync().ConfigureAwait(false);
         }
 
         /// <summary></summary>
-        internal void ShowKeys()
+        internal async Task ShowKeysAsync()
         {
-            Console.WriteLine(Properties.Resources.ListOfAvailableKeys);
+            await Console.Out.WriteLineAsync(Properties.Resources.ListOfAvailableKeys).ConfigureAwait(false);
+
             foreach (var key in Keys)
             {
                 var mandatory = string.Empty;
@@ -179,12 +190,12 @@
                     mandatory = $"Key '{key.Value}' is mandatory.";
                 }
 
-                Console.WriteLine($"--{key.Value}, {key.Key}. {mandatory}".TrimEnd());
+                await Console.Out.WriteLineAsync($"--{key.Value}, {key.Key}. {mandatory}".TrimEnd()).ConfigureAwait(false);
             }
         }
 
         /// <summary></summary>
-        internal void ShowValues()
+        internal async Task ShowValuesAsync()
         {
             foreach (var key in Keys)
             {
@@ -193,7 +204,8 @@
                 {
                     continue;
                 }
-                Console.WriteLine($"{key.Value}: '{value}'.");
+
+                await Console.Out.WriteLineAsync($"{key.Value}: '{value}'.").ConfigureAwait(false);
             }
         }
 

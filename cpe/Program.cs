@@ -4,7 +4,15 @@
     {
         /// <summary></summary>
         /// <param name="args"></param>
-        static void Main(string[] args)
+        public static void Main(string[] args)
+        {
+            MainAsync(args).GetAwaiter().GetResult();
+        }
+
+        /// <summary></summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        private static async System.Threading.Tasks.Task MainAsync(string[] args)
         {
             var config = Config.Init(args);
 
@@ -16,9 +24,9 @@
                 return;
             }
 
-            config.ShowValues();
+            await config.ShowValuesAsync().ConfigureAwait(false);
 
-            Make.Extension(config);
+            await Make.ExtensionAsync(config).ConfigureAwait(false);
         }
     }
 }

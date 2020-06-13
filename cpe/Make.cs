@@ -30,7 +30,7 @@
 
         /// <summary></summary>
         /// <param name="config"></param>
-        static internal void Extension(Config config)
+        internal static async Task ExtensionAsync(Config config)
         {
             if (config is null)
             {
@@ -54,13 +54,14 @@
                 SaveImage($"{name}\\{image.Value}", res);
             });
 
-            Create(name);
+            _ = bool.TryParse($"{config.GetValue("delete_artifactory")}", out bool isDeleteArtifactory);
+            await CreateAsync(name, isDeleteArtifactory).ConfigureAwait(false);
         }
 
         /// <summary></summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        static private string GetResource(string name)
+        private static string GetResource(string name)
         {
             if (Properties.Resources.ResourceManager.GetObject(name, CultureInfo.InvariantCulture) is byte[] dataByte)
             {
@@ -79,7 +80,7 @@
         /// <summary></summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        static private Bitmap GetImage(string name)
+        private static Bitmap GetImage(string name)
         {
             if (Properties.Resources.ResourceManager.GetObject(name, CultureInfo.InvariantCulture) is byte[] dataByte)
             {
@@ -93,7 +94,7 @@
         /// <summary></summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        static private string GetPath(string name)
+        private static string GetPath(string name)
         {
             var path = $"{Directory.GetCurrentDirectory()}\\{name}";
             var dir = $"{Path.GetDirectoryName(path)}";
@@ -109,15 +110,16 @@
         /// <summary></summary>
         /// <param name="config"></param>
         /// <param name="resource"></param>
-        static private string ChangeResource(Config config, string resource)
+        private static string ChangeResource(Config config, string resource)
         {
-            config.Keys.AsParallel().ForAll(key =>
+            foreach (var key in config.Keys)
             {
+                var keyValue = config.GetValue(key.Value);
                 resource = resource.Replace(
                     string.Join(null, "{", $"{key.Value}", "}"),
-                    config.GetValue(key.Value),
+                    keyValue,
                     StringComparison.InvariantCultureIgnoreCase);
-            });
+            }
 
             return resource;
         }
@@ -125,16 +127,16 @@
         /// <summary></summary>
         /// <param name="name"></param>
         /// <param name="resource"></param>
-        static private async Task SaveResourceAsync(string name, string resource) => await File.WriteAllTextAsync(GetPath(name), resource).ConfigureAwait(false);
+        private static async Task SaveResourceAsync(string name, string resource) => await File.WriteAllTextAsync(GetPath(name), resource).ConfigureAwait(false);
 
         /// <summary></summary>
         /// <param name="name"></param>
         /// <param name="resource"></param>
-        static private void SaveImage(string name, Bitmap resource) => resource.Save(GetPath(name));
+        private static void SaveImage(string name, Bitmap resource) => resource.Save(GetPath(name));
 
         /// <summary></summary>
         /// <param name="name"></param>
-        static private void Delete(string name)
+        private static void Delete(string name)
         {
             var path = $"{Directory.GetCurrentDirectory()}\\{name}";
 
@@ -154,22 +156,32 @@
             }
         }
 
-        static private void Create(string name)
+        /// <summary></summary>
+        /// <param name="name"></param>
+        /// <param name="isDeleteArtifactory"></param>
+        /// <returns></returns>
+        private static async Task CreateAsync(string name, bool isDeleteArtifactory)
         {
             var path = GetPath(name);
-            Console.WriteLine($"Path extension: {path}");
+            await Console.Out.WriteLineAsync($"Path extension: {path}").ConfigureAwait(false);
 
             var chrome = string.Concat(Environment.GetEnvironmentVariable("ProgramFiles(x86)"), @"\Google\Chrome\Application\chrome.exe");
             if (!File.Exists(chrome))
             {
-                Console.WriteLine(Properties.Resources.ChromeAppNotFound);
+                await Console.Out.WriteLineAsync(Properties.Resources.ChromeAppNotFound).ConfigureAwait(false);
                 return;
             }
 
-            //Create *.pem and *.crx files
-            Process.Start(chrome, $"--pack-extension=\"{path}\" --no-message-box").WaitForExit();
+            // Create *.pem and *.crx files
+            await Task.Run(() => Process.Start(chrome, $"--pack-extension=\"{path}\" --no-message-box").WaitForExit()).ConfigureAwait(false);
 
-            Console.WriteLine(Properties.Resources.ChromeExtensionWasCreatedSuccessfully);
+            // Delete unpacked extension
+            if (isDeleteArtifactory && Directory.Exists(path))
+            {
+                Directory.Delete(path, true);
+            }
+
+            await Console.Out.WriteLineAsync(Properties.Resources.ChromeExtensionWasCreatedSuccessfully).ConfigureAwait(false);
         }
     }
 }

@@ -4,7 +4,7 @@ echo off
 
 call killprocess.cmd
 
-cd ..
+cd ..\..
 
 :: Del old data
 IF EXIST "publish" RMDIR "publish" /Q /S
