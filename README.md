@@ -22,6 +22,10 @@
 Chrome proxy extension.
 This is an extension of the proxy with data substitution in the authorization form.
 
+![Proxy Install](https://user-images.githubusercontent.com/5703678/84568021-4d752580-ad85-11ea-9ded-5df3fd486d01.png)
+
+![Proxy Setting](https://user-images.githubusercontent.com/5703678/84567969-025b1280-ad85-11ea-9693-78a3c95449c8.png)
+
 ## Used packages
 
 - [Microsoft.Extensions.Configuration.CommandLine](https://www.nuget.org/packages/Microsoft.Extensions.Configuration.CommandLine) 3.1.5
