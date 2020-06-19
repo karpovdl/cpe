@@ -19,6 +19,9 @@
 
 [![](cpe/Resources/cpe48.png)](https://github.com/karpovdl/cpe)
 
+:green_book: [Samples](./SAMPLES.md)
+:green_book: [Tests](./TESTS.md)
+
 Chrome proxy extension.
 This is an extension of the proxy with data substitution in the authorization form.
 
