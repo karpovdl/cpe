@@ -34,6 +34,3 @@ This is an extension of the proxy with data substitution in the authorization fo
 - [Microsoft.Extensions.Configuration.CommandLine](https://www.nuget.org/packages/Microsoft.Extensions.Configuration.CommandLine) 3.1.5
 - [System.Drawing.Common](https://www.nuget.org/packages/System.Drawing.Common) 4.7.0
 
-## Sample create extension
-
-[SAMPLE.md](./SAMPLE.md)
