@@ -17,10 +17,10 @@
 [24]: https://scan.coverity.com/projects/21197/badge.svg "Coverity Scan Build Status"
 [25]: https://scan.coverity.com/projects/karpovdl-cpe
 
-[![](cpe/Resources/cpe48.png)](https://github.com/karpovdl/cpe)
-
 :green_book: [Samples](./SAMPLES.md)
 :green_book: [Tests](./TESTS.md)
+
+[![](cpe/Resources/cpe48.png)](https://github.com/karpovdl/cpe)
 
 Chrome proxy extension.
 This is an extension of the proxy with data substitution in the authorization form.
